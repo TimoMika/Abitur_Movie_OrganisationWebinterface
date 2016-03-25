@@ -1,12 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
     <meta charset="utf-8">
+    <style type="text/css"></style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="scripts.js"></script>
+    <script src="http://mysqljs.com/mysql.js">
+</script>
+  </head>
 
-  <style type="text/css"></style>
-  <link rel="stylesheet" type="text/css" href="style.css">
-
-  <body>
+  <body onload="load()">
     <div class="wrapper">
-      <p>Test</p>
+      <h1>Abi Film organisation</h1>
+      <table class="auswahl">
+        <tr>
+          <th>
+            <p>Name Auswählen:</p>
+          </th>
+          <th>
+            <p>Spezielle Tabellen:</p>
+          </th>
+          <th>
+            <p>Drehtage:</p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <select id="schauspielerSelect">
+            </select>
+            <button id="schauspielerButton" onclick="nachSchauspielerSuchen()">Suchen</button>
+          </td>
+          <td>
+            <select>
+              <option></option>
+              <option>Alle Takes</option>
+              <option>alle Schauspieler</option>
+              <option>Alle Scenen</option>
+            </select>
+            <button id="spTablleButton" onclick="spTabelle()">Suchen</button>
+          </td>
+          <td>
+            <select id="drehtageButton">
+            </select>
+            <button id="drehtageTablleButton" onclick="drehtageTablle()">Suchen</button>
+          </td>
+        </tr>
+      </table>
+
+      <table id="SQLres">
+      </table>
     </div>
 </body></html>
