@@ -1,0 +1,12 @@
+body{
+  margin: 0;
+}
+p {
+    color: #000000;
+    margin: 0;
+}
+.wrapper{
+  width: 1000px;
+  margin: auto;
+  background-color: #568657;
+}
