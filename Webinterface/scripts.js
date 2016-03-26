@@ -58,7 +58,7 @@ function fillTableTakes() {
     "733eEW24Nr",
     "sql7112264",
     sql,
-    fillTableHTM
+    fillTableHTML
   );
 }
 
