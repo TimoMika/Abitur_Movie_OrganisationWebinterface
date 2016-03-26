@@ -2,7 +2,7 @@
 function getSQLforSchauspieler(name){
   var sql = "select abkuerzung as 'Abk.', DATE(datum) as Datum, uhrzeit as Uhrzeit, id_scene as Szene, ort as Ort, dauer as Dauer, schauspieler_anweisung as Anweisung ";
   sql +=  "from schauspieler, takes, connector_schauspieler_takes WHERE (schauspieler.name = '" + name + "') and (takes.id = id_take or id_take = 0)  "
-  sql += "and (schauspieler.id = id_schauspieler)";
+  sql += "and (schauspieler.id = id_schauspieler) Order by datum ASC, uhrzeit ASC";
   return sql;
 }
 
