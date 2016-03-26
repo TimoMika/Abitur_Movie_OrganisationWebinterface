@@ -1,3 +1,8 @@
+var host = "sql7.freemysqlhosting.net";
+var username = "sql7112264";
+var password = "733eEW24Nr";
+var database = "sql7112264";
+
 
 function getSQLforSchauspieler(name){
   var sql = "select abkuerzung as 'Abk.', DATE(datum) as Datum, uhrzeit as Uhrzeit, id_scene as Szene, ort as Ort, dauer as Dauer, schauspieler_anweisung as Anweisung ";
@@ -6,18 +11,36 @@ function getSQLforSchauspieler(name){
   return sql;
 }
 
-function getSQLfordropdown(){
+function getSQLforSchauspielerAtDate(datum) {
+  var sql = "select abkuerzung as 'Abk.', name as Name, uhrzeit as Uhrzeit, id_take as 'Take ID' "
+  sql += "from schauspieler, takes, connector_schauspieler_takes Where takes.id = id_take and schauspieler.id = id_schauspieler"
+  if(datum != "Alle Drehtage") {
+    sql += " and datum = '" + datum + "' ";
+  }
+  sql += "Order by uhrzeit ASC"
+  return sql;
+
+}
+
+function getSQLforSchauspielerDropdown(){
   return "select name FROM schauspieler GROUP BY name";
 }
 
-function  getSQLforAllTakes() {
-  var sql = "select id_scene as Szene, beschreibung as Beschreibung, datum as Datum, uhrzeit as Uhrzeit, dauer as Dauer, ort as Ort, orts_austattung as 'Orts Austattung', id as ID "
-  sql += "from takes Order by datum ASC, uhrzeit ASC";
+function getSQLforDrehtageDropdown(){
+  return "select datum FROM takes GROUP BY datum";
+}
+
+function  getSQLforAllTakes(datum) {
+  var sql = "select id_scene as Szene, beschreibung as Beschreibung, datum as Datum, uhrzeit as Uhrzeit, dauer as Dauer, ort as Ort, orts_austattung as 'Orts Austattung', id as ID from takes "
+  if(datum != "Alle Drehtage") {
+    sql += "Where datum = '" + datum + "' ";
+  }
+  sql += "Order by datum ASC, uhrzeit ASC";
   return sql;
 }
 
 function load(){
-  fillDropdowns();
+  fillSchauspielerDropdown();
 }
 
 function nachSchauspielerSuchen(){
@@ -29,11 +52,6 @@ function nachSchauspielerSuchen(){
   fillTableSchauspieler(document.getElementById("schauspielerSelect").value);
 }
 
-
-function drehtageTablle(){
-  console.log(document.getElementById("schauspielerSelect").selectedIndex);
-}
-
 function spTabelle() {
   var table = document.getElementById("SQLres");
   while(table.childNodes.length>0){
@@ -42,41 +60,56 @@ function spTabelle() {
   var selectedIndex = document.getElementById("spTabelleSelect").selectedIndex;
   console.log(selectedIndex);
   //Fuction bei der Auswahl: "Alle Takes"
-  if(selectedIndex == 1) {
-      fillTableTakes();
+  if(selectedIndex == 0) {
+    fillTableTakes(document.getElementById("drehtageSelect").value);
+  } else if (selectedIndex == 1) {
+    fillTableSchauspielerAtDate(document.getElementById("drehtageSelect").value);
   }
-
 }
 
-function fillTableTakes() {
-  console.log("fill Takes");
-  var sql = getSQLforAllTakes();
+function fillTableSchauspielerAtDate(datum) {
+  console.log("fill Schauspieler for " + String(datum));
+  var sql = getSQLforSchauspielerAtDate(datum);
   console.log(sql);
   MySql.Execute(
-    "sql7.freemysqlhosting.net",
-    "sql7112264",
-    "733eEW24Nr",
-    "sql7112264",
+    host,
+    username,
+    password,
+    database,
     sql,
     fillTableHTML
   );
 }
 
-function fillDropdowns(){
-  console.log("fill Dropdown");
-  var sql = getSQLfordropdown();
+function fillTableTakes(datum) {
+  console.log("fill Takes for " + String(datum));
+  var sql = getSQLforAllTakes(datum);
   console.log(sql);
   MySql.Execute(
-    "sql7.freemysqlhosting.net",
-    "sql7112264",
-    "733eEW24Nr",
-    "sql7112264",
+    host,
+    username,
+    password,
+    database,
     sql,
-    fillDropdownHTML
+    fillTableHTML
   );
 }
 
-function fillDropdownHTML(data){
+function fillSchauspielerDropdown(){
+  console.log("fill schauspielerSelect Dropdown");
+  var sql = getSQLforSchauspielerDropdown();
+  console.log(sql);
+  MySql.Execute(
+    host,
+    username,
+    password,
+    database,
+    sql,
+    fillSchauspielerDropdownHTML
+  );
+}
+
+function fillSchauspielerDropdownHTML(data){
   if(!data.Success){
     alert("Failed to acces the database please message Mika oder toger5!!");
   }
@@ -90,16 +123,47 @@ function fillDropdownHTML(data){
       dropDonwnMenue.appendChild(schauspielerOption);
     }
   }
+  fillDrehtageDropdown();
+}
+
+function fillDrehtageDropdown(){
+  console.log("fill drehtageSelect Dropdown");
+  var sql = getSQLforDrehtageDropdown();
+  console.log(sql);
+  MySql.Execute(
+    host,
+    username,
+    password,
+    database,
+    sql,
+    fillDrehtageDropdownHTML
+  );
+}
+
+function fillDrehtageDropdownHTML(data){
+  if(!data.Success){
+    alert("Failed to acces the database please message Mika oder toger5!!");
+  }
+  else{
+    var dropDonwnMenue = document.getElementById("drehtageSelect");
+    var resultArray = data.Result;
+    for(i in resultArray){
+      var name = document.createTextNode(resultArray[i].datum.split("T")[0]);
+      var schauspielerOption = document.createElement("option");
+      schauspielerOption.appendChild(name);
+      dropDonwnMenue.appendChild(schauspielerOption);
+    }
+  }
 }
 
 function fillTableSchauspieler(id){
   var sql = getSQLforSchauspieler(id);
   console.log(sql);
   MySql.Execute(
-    "sql7.freemysqlhosting.net",
-    "sql7112264",
-    "733eEW24Nr",
-    "sql7112264",
+    host,
+    username,
+    password,
+    database,
     sql,
     fillTableHTML
   );
