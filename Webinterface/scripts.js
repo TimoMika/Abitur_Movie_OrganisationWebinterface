@@ -36,13 +36,6 @@ function drehtageTablle(){
 
 
 
-
-
-
-
-
-
-
 function fillDropdowns(){
   console.log("fill Dropdown");
   var sql = getSQLfordropdown();
