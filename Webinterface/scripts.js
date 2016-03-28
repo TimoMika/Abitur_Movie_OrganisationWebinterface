@@ -12,7 +12,7 @@ function getSQLforSchauspieler(name){
 }
 
 function getSQLforSchauspielerAtDate(datum) {
-  var sql = "select abkuerzung as 'Abk.', name as Name, uhrzeit as Uhrzeit, id_take as 'Take ID' "
+  var sql = "select abkuerzung as 'Abk.', name as Name, uhrzeit as Uhrzeit, id_take as 'Take ID', beschreibung as Beschreibung "
   sql += "from schauspieler, takes, connector_schauspieler_takes Where takes.id = id_take and schauspieler.id = id_schauspieler"
   if(datum != "Alle Drehtage") {
     sql += " and datum = '" + datum + "' ";
