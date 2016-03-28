@@ -11,7 +11,7 @@
 
   <body onload="load()">
     <div class="wrapper">
-      <h1>Abi Film organisation</h1>
+      <h1>Abi Film Organisation</h1>
       <table class="auswahl">
         <tr>
           <th>
@@ -20,9 +20,9 @@
           <th>
             <p>Spezielle Tabellen:</p>
           </th>
-          <th>
+          <!--<th>
             <p>Drehtage:</p>
-          </th>
+          </th>-->
         </tr>
         <tr>
           <td>
@@ -31,18 +31,19 @@
             <button id="schauspielerButton" onclick="nachSchauspielerSuchen()">Suchen</button>
           </td>
           <td>
-            <select>
-              <option></option>
+            <select id="spTabelleSelect">
+              <!-- <option></option> -->
               <option>Alle Takes</option>
-              <option>alle Schauspieler</option>
+              <option>Alle Schauspieler</option>
               <option>Alle Scenen</option>
             </select>
-            <button id="spTablleButton" onclick="spTabelle()">Suchen</button>
-          </td>
-          <td>
-            <select id="drehtageButton">
+            <!-- <button id="spTabelleButton" onclick="spTabelle()">Suchen</button> -->
+          <!--</td>
+          <td>-->
+            <select id="drehtageSelect">
+              <option>Alle Drehtage</option>
             </select>
-            <button id="drehtageTablleButton" onclick="drehtageTablle()">Suchen</button>
+            <button id="drehtageTablleButton" onclick="spTabelle()">Suchen</button>
           </td>
         </tr>
       </table>

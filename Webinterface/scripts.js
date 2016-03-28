@@ -1,23 +1,46 @@
+var host = "sql7.freemysqlhosting.net";
+var username = "sql7112264";
+var password = "733eEW24Nr";
+var database = "sql7112264";
+
 
 function getSQLforSchauspieler(name){
-  //datum as Datum, uhrzeit as Uhrzeit, id_scene as Szene, ort as Ort, dauer as Dauer, schauspieler_anweisung as Anweisung
-  //WHERE (id_schuspieler = " + String(id) + ") and (takes.id = id_take)
-  //connector_schauspieler_takes
   var sql = "select abkuerzung as 'Abk.', DATE(datum) as Datum, uhrzeit as Uhrzeit, id_scene as Szene, ort as Ort, dauer as Dauer, schauspieler_anweisung as Anweisung ";
   sql +=  "from schauspieler, takes, connector_schauspieler_takes WHERE (schauspieler.name = '" + name + "') and (takes.id = id_take or id_take = 0)  "
-  sql += "and (schauspieler.id = id_schauspieler)";
+  sql += "and (schauspieler.id = id_schauspieler) Order by datum ASC, uhrzeit ASC";
   return sql;
-  //return "select id as SchauspielerID, abkuerzung as 'Namens kuerzel' from schauspieler";
 }
-function getSQLfordropdown(){
+
+function getSQLforSchauspielerAtDate(datum) {
+  var sql = "select abkuerzung as 'Abk.', name as Name, uhrzeit as Uhrzeit, id_take as 'Take ID' "
+  sql += "from schauspieler, takes, connector_schauspieler_takes Where takes.id = id_take and schauspieler.id = id_schauspieler"
+  if(datum != "Alle Drehtage") {
+    sql += " and datum = '" + datum + "' ";
+  }
+  sql += "Order by uhrzeit ASC"
+  return sql;
+
+}
+
+function getSQLforSchauspielerDropdown(){
   return "select name FROM schauspieler GROUP BY name";
 }
 
-//fillDropdown(document.getElementById("mySelect").selectedIndex)
-function load(){
-  fillDropdowns();
+function getSQLforDrehtageDropdown(){
+  return "select datum FROM takes GROUP BY datum";
+}
 
-  //hier muss nach den richtigen cvaiablen gesucht werden in z.b. textfeldern oder dropdownmenues und dann die richtige abfrage gestartet werden
+function  getSQLforAllTakes(datum) {
+  var sql = "select id_scene as Szene, beschreibung as Beschreibung, datum as Datum, uhrzeit as Uhrzeit, dauer as Dauer, ort as Ort, orts_austattung as 'Orts Austattung', id as ID from takes "
+  if(datum != "Alle Drehtage") {
+    sql += "Where datum = '" + datum + "' ";
+  }
+  sql += "Order by datum ASC, uhrzeit ASC";
+  return sql;
+}
+
+function load(){
+  fillSchauspielerDropdown();
 }
 
 function nachSchauspielerSuchen(){
@@ -28,30 +51,71 @@ function nachSchauspielerSuchen(){
   console.log(document.getElementById("schauspielerSelect").value);
   fillTableSchauspieler(document.getElementById("schauspielerSelect").value);
 }
-function drehtageTablle(){
 
+function spTabelle() {
+  var table = document.getElementById("SQLres");
+  while(table.childNodes.length>0){
+    table.removeChild(table.childNodes[0]);
+  }
+  var selectedIndex = document.getElementById("spTabelleSelect").selectedIndex;
+  console.log(selectedIndex);
+  //Fuction bei der Auswahl: "Alle Takes"
+  if(selectedIndex == 0) {
+    fillTableTakes(document.getElementById("drehtageSelect").value);
+  } else if (selectedIndex == 1) {
+    fillTableSchauspielerAtDate(document.getElementById("drehtageSelect").value);
+  }
 }
 
+function fillTableSchauspielerAtDate(datum) {
+  console.log("fill Schauspieler for " + String(datum));
+  var sql = getSQLforSchauspielerAtDate(datum);
+  console.log(sql);
+  MySql.Execute(
+    host,
+    username,
+    password,
+    database,
+    sql,
+    fillTableHTML
+  );
+}
 
-
+function fillTableTakes(datum) {
+  console.log("fill Takes for " + String(datum));
+  var sql = getSQLforAllTakes(datum);
+  console.log(sql);
+  MySql.Execute(
+    host,
+    username,
+    password,
+    database,
+    sql,
+    fillTableHTML
+  );
+}
 
 
 function fillDropdowns(){
   console.log("fill Dropdown");
   var sql = getSQLfordropdown();
+}
+
+function fillSchauspielerDropdown(){
+  console.log("fill schauspielerSelect Dropdown");
+  var sql = getSQLforSchauspielerDropdown();
   console.log(sql);
   MySql.Execute(
-    "sql7.freemysqlhosting.net",
-    "sql7112264",
-    "733eEW24Nr",
-    "sql7112264",
+    host,
+    username,
+    password,
+    database,
     sql,
-    fillDropdownHTML//function (data) {/*result = data;*/console.log(data)}
+    fillSchauspielerDropdownHTML
   );
 }
 
-function fillDropdownHTML(data){
-  console.log("adshf waere toll zu sehen");
+function fillSchauspielerDropdownHTML(data){
   if(!data.Success){
     alert("Failed to acces the database please message Mika oder toger5!!");
   }
@@ -65,23 +129,54 @@ function fillDropdownHTML(data){
       dropDonwnMenue.appendChild(schauspielerOption);
     }
   }
+  fillDrehtageDropdown();
+}
+
+function fillDrehtageDropdown(){
+  console.log("fill drehtageSelect Dropdown");
+  var sql = getSQLforDrehtageDropdown();
+  console.log(sql);
+  MySql.Execute(
+    host,
+    username,
+    password,
+    database,
+    sql,
+    fillDrehtageDropdownHTML
+  );
+}
+
+function fillDrehtageDropdownHTML(data){
+  if(!data.Success){
+    alert("Failed to acces the database please message Mika oder toger5!!");
+  }
+  else{
+    var dropDonwnMenue = document.getElementById("drehtageSelect");
+    var resultArray = data.Result;
+    for(i in resultArray){
+      var name = document.createTextNode(resultArray[i].datum.split("T")[0]);
+      var schauspielerOption = document.createElement("option");
+      schauspielerOption.appendChild(name);
+      dropDonwnMenue.appendChild(schauspielerOption);
+    }
+  }
 }
 
 function fillTableSchauspieler(id){
   var sql = getSQLforSchauspieler(id);
   console.log(sql);
   MySql.Execute(
-    "sql7.freemysqlhosting.net",
-    "sql7112264",
-    "733eEW24Nr",
-    "sql7112264",
+    host,
+    username,
+    password,
+    database,
     sql,
-    fillTableSchauspielerHTML//function (data) {/*result = data;*/console.log(data)}
+    fillTableHTML
   );
 }
 
-function fillTableSchauspielerHTML(data){
-  console.log("beide ?");
+//Fills the SQLres Table with the data of the SQL select result
+function fillTableHTML(data){
   console.log(data)
   if(!data.Success){
     alert("Failed to acces the database please message Mika oder toger5!!");
@@ -115,9 +210,6 @@ function fillTableSchauspielerHTML(data){
       }
       SQLres.appendChild(tableRow);
     }
-
-
-
 
   }
 }
