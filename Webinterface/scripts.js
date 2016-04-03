@@ -43,6 +43,21 @@ function load(){
   fillSchauspielerDropdown();
 }
 
+function printTable(){
+   var divToPrint=document.getElementById("SQLres").outerHTML;
+   newWin= window.open('', 'Druck Fenster');
+   newWin.document.open();
+   newWin.document.write('<html><head><title></title>');
+   newWin.document.write('<style type="text/css"></style><link rel="stylesheet" type="text/css" href="style.css"></head><div class="wrapper"><body>');
+   newWin.document.write(divToPrint);
+   newWin.document.write('</div></body></html>');
+   newWin.document.close();
+
+   newWin.onload=function(){console.log("Print!!"); newWin.print(); setTimeout(function () { newWin.close(); }, 100);}
+   newWin.focus();
+   console.log("printTable End");
+}
+
 function nachSchauspielerSuchen(){
   var table = document.getElementById("SQLres");
   while(table.childNodes.length>0){

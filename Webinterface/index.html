@@ -5,8 +5,7 @@
     <style type="text/css"></style>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="scripts.js"></script>
-    <script src="http://mysqljs.com/mysql.js">
-</script>
+    <script src="http://mysqljs.com/mysql.js"></script>
   </head>
 
   <body onload="load()">
@@ -20,9 +19,9 @@
           <th>
             <p>Spezielle Tabellen:</p>
           </th>
-          <!--<th>
-            <p>Drehtage:</p>
-          </th>-->
+          <th>
+            <p>Drucken:</p>
+          </th>
         </tr>
         <tr>
           <td>
@@ -37,13 +36,13 @@
               <option>Alle Schauspieler</option>
               <option>Alle Scenen</option>
             </select>
-            <!-- <button id="spTabelleButton" onclick="spTabelle()">Suchen</button> -->
-          <!--</td>
-          <td>-->
             <select id="drehtageSelect">
               <option>Alle Drehtage</option>
             </select>
             <button id="drehtageTablleButton" onclick="spTabelle()">Suchen</button>
+          </td>
+          <td>
+            <button style="width:100%" id="printButton" onclick="printTable()"><img src="print.png" style="padding-top:2px" /></button>
           </td>
         </tr>
       </table>
