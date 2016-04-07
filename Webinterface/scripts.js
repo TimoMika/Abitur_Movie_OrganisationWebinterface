@@ -2,6 +2,7 @@ var host = "sql7.freemysqlhosting.net";
 var username = "sql7112264";
 var password = "733eEW24Nr";
 var database = "sql7112264";
+var tableMode = 0;
 
 
 function getSQLforSchauspieler(name){
@@ -48,7 +49,19 @@ function printTable(){
    newWin= window.open('', 'Druck Fenster');
    newWin.document.open();
    newWin.document.write('<html><head><title></title>');
-   newWin.document.write('<style type="text/css"></style><link rel="stylesheet" type="text/css" href="style.css"></head><div class="wrapper"><body>');
+   newWin.document.write('<style type="text/css"></style><link rel="stylesheet" type="text/css" href="style.css"></head><body><div class="wrapper"><h1>');
+   if(tableMode == 0) {
+     alert("Tabelle ist leer!");
+     newWin.document.close();
+     newWin.close();
+   }
+   else if(tableMode == 1) {
+     newWin.document.write(document.getElementById("schauspielerSelect").value + ' (' + document.getElementById("SQLres").rows[1].cells[0].textContent + ')');
+   }
+   else if (tableMode == 2) {
+     newWin.document.write(document.getElementById("spTabelleSelect").value + ' - ' + document.getElementById("drehtageSelect").value);
+   }
+   newWin.document.write('</h1>');
    newWin.document.write(divToPrint);
    newWin.document.write('</div></body></html>');
    newWin.document.close();
@@ -59,6 +72,7 @@ function printTable(){
 }
 
 function nachSchauspielerSuchen(){
+  tableMode = 1;
   var table = document.getElementById("SQLres");
   while(table.childNodes.length>0){
     table.removeChild(table.childNodes[0]);
@@ -68,6 +82,7 @@ function nachSchauspielerSuchen(){
 }
 
 function spTabelle() {
+  tableMode = 2;
   var table = document.getElementById("SQLres");
   while(table.childNodes.length>0){
     table.removeChild(table.childNodes[0]);
@@ -200,6 +215,7 @@ function fillTableHTML(data){
     var SQLres = document.getElementById("SQLres");
     var resultArray = data.Result;
 
+    var tableHeader = document.createElement("thead");
     var headerRow = document.createElement("tr");
     for (rowName in resultArray[0]) {
       var thText = document.createTextNode(rowName);
@@ -207,8 +223,10 @@ function fillTableHTML(data){
       tableHeaderData.appendChild(thText);
       headerRow.appendChild(tableHeaderData);
     }
-    SQLres.appendChild(headerRow);
+    tableHeader.appendChild(headerRow);
+    SQLres.appendChild(tableHeader);
 
+    var tableBody = document.createElement("tbody");
     for (i = 0;i < resultArray.length;i++){
       var tableRow = document.createElement("tr");
       var rowData = resultArray[i];
@@ -220,11 +238,15 @@ function fillTableHTML(data){
         }
         var tdText = document.createTextNode(value);
         var tableData = document.createElement("td");
-        tableData.appendChild(tdText);
+        var tableDataDiv = document.createElement("div");
+
+        tableDataDiv.appendChild(tdText);
+        tableData.appendChild(tableDataDiv);
         tableRow.appendChild(tableData);
       }
-      SQLres.appendChild(tableRow);
+      tableBody.appendChild(tableRow);
     }
+    SQLres.appendChild(tableBody);
 
   }
 }

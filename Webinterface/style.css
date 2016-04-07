@@ -1,9 +1,26 @@
 body{
   margin: 0;
   font-family: "Source Sans Pro", sans-serif;
-//  background-color: #1a2632;
-height: 100%;
+  /*background-color: #1a2632;*/
+  height: 100%;
 }
+
+.wrapper{
+  position: relative;
+  width: 1000px;
+  //height: 100%;
+  margin: auto;
+  background-color: #1a2632;
+  align-items: center;
+}
+
+#SQLres{
+  width: 100%;
+  text-align: center;
+}
+
+
+@media screen {
 html{
   height: 100%;
 }
@@ -20,18 +37,6 @@ h1{
   font-size: 60px;
 }
 
-.wrapper{
-  position: relative;
-  width: 1000px;
-  //height: 100%;
-  margin: auto;
-  background-color: #1a2632;
-  align-items: center;
-}
-#SQLres{
-  width: 100%;
-  text-align: center;
-}
 table {
   position: relative;
   //height: 100%;
@@ -55,4 +60,71 @@ td{
 .auswahl th{
   color: #000;
   background-color: rgb(33, 124, 181);
+}
+}
+
+@media print{
+  body{
+    margin: 0;
+    font-family: "Source Sans Pro", sans-serif;
+    /*background-color: #1a2632;*/
+    height: auto;
+  }
+
+  h1{
+    margin-top: 0;
+    padding-top: 1em;
+    color: #fff;
+    text-align: center;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size: 40px;
+  }
+
+  .wrapper{
+    page-break-after:auto;
+    page-break-before:auto;
+    position: relative;
+    width: 1000px;
+    //height: 100%;
+    margin: auto;
+    background-color: #1a2632;
+    align-items: center;
+  }
+  table {
+    /*margin-top: 50px;*/
+    position: relative;
+    /*page-break-after:auto;*/
+    /*page-break-before:auto;*/
+    /*page-break-inside:auto;*/
+  }
+  table, th, td {
+    /*page-break-after:auto;*/
+    border-collapse: collapse;
+    border: 1px solid black;
+  }
+  th {
+    /*page-break-inside: avoid;*/
+    font-size: 18px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    background-color: #1a2632;
+    color: #fff;
+  }
+  tr {
+    /*page-break-inside:avoid;*/
+    /*page-break-after:auto;*/
+  }
+  td {
+    background-color: rgb(231, 234, 260);
+    font-size: 16px;
+    /*border-radius: 5px;*/
+
+    /*page-break-inside:avoid;*/
+    /*page-break-after:auto;*/
+  }
+  thead {
+    display:table-header-group;
+  }
+  div {
+    page-break-inside:avoid;
+  }
 }
