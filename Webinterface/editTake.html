@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <style type="text/css"></style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="scripts.js"></script>
+    <script src="http://mysqljs.com/mysql.js"></script>
+  </head>
+
+  <body onload="loadEdit()">
+    <div class="wrapper">
+      <h1>Abi Film Organisation</h1>
+      <h2>Takes Editieren</h2>
+      <table class="auswahl">
+      <!--style="width:100%"> -->
+        <tr>
+          <th>
+            <p>Take Auswählen:</p>
+          </th>
+          <th>
+            <p>Speichern:</p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <select id="takeSelect">
+            </select>
+            <button id="takeButton" onclick="nachTakeSuchen()">Suchen</button>
+          </td>
+          <td>
+            <button style="width:100%" id="saveButton" onclick="saveTake()"><img src="print.png" style="padding-top:2px" /></button>
+          </td>
+        </tr>
+      </table>
+
+      <table id="takeTable">
+      </table>
+    </div>
+</body></html>
