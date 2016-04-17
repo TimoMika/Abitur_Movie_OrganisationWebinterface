@@ -113,7 +113,7 @@ function spTabelle() {
   console.log(selectedIndex);
   //Fuction bei der Auswahl: "Alle Takes"
   if(selectedIndex == 0) {
-    fillTableTakes(document.getElementById("drehtageSelect").value);
+    fillTableTakesDate(document.getElementById("drehtageSelect").value);
   } else if (selectedIndex == 1) {
     fillTableSchauspielerAtDate(document.getElementById("drehtageSelect").value);
   }
@@ -133,7 +133,7 @@ function fillTableSchauspielerAtDate(datum) {
   );
 }
 
-function fillTableTakes(datum) {
+function fillTableTakesDate(datum) {
   console.log("fill Takes for " + String(datum));
   var sql = getSQLforAllTakes(datum);
   console.log(sql);
