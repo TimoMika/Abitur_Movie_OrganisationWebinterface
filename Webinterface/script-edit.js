@@ -1,4 +1,34 @@
+var host = "sql7.freemysqlhosting.net";
+var username = "sql7112264";
+var password = "733eEW24Nr";
+var database = "sql7112264";
+var tableMode = 0;
+
 var edited = false;
+
+function getSQLforTakesDropdown(){
+  return "select id FROM takes Order BY id ASC";
+}
+
+function getSQLforTakes(id) {
+  return "select id as ID, id_scene as 'ID Szene', beschreibung as Beschreibung, datum as Datum, uhrzeit as Uhrzeit, dauer as Dauer, ort as Ort, orts_austattung as 'Orts Austattung', status as Status from takes where id = " + id;
+}
+
+function getSQLforTakeSave(id) {
+  var takeTable = document.getElementById("takeTable");
+  console.log(takeTable.rows[1].cells[0].textContent);
+  var sql = "UPDATE takes SET";
+  sql += " beschreibung = '" + takeTable.rows[1].cells[2].textContent;
+  sql += "', id_scene = " + takeTable.rows[1].cells[1].textContent;
+  sql += ", datum = '" + takeTable.rows[1].cells[3].textContent;
+  sql += "', uhrzeit = '" + takeTable.rows[1].cells[4].textContent;
+  sql += "', status = '" + takeTable.rows[1].cells[8].firstChild.value;
+  sql += "', ort = '" + takeTable.rows[1].cells[6].textContent;
+  sql += "', orts_austattung = '" + takeTable.rows[1].cells[7].textContent;
+  sql += "', dauer = '" + takeTable.rows[1].cells[5].textContent;
+  sql +=  "' WHERE id = " + id;
+  return sql;
+}
 
 function loadEdit() {
   var psswd = prompt("Passwort eingeben:");
@@ -112,7 +142,33 @@ function fillEditTableHTML(data){
     }
     takeTable.appendChild(tableBody);
     takeTable.rows[1].cells[0].setAttribute("contenteditable", "false");
+
+    var stateSelect = document.createElement("select");
+    stateSelect.setAttribute("id", "stateSelect");
+
+    stateSelect.appendChild(createOption("zu erledigen"));
+    stateSelect.appendChild(createOption("erledigt"));
+    stateSelect.appendChild(createOption("nachdreh"));
+
+    var stateText = takeTable.rows[1].cells[8].firstChild.innerHTML;
+    takeTable.rows[1].cells[8].replaceChild(stateSelect, takeTable.rows[1].cells[8].firstChild);
+
+    if(stateText == "zu erledigen") {
+      stateSelect.selectedIndex = 0;
+    } else if (stateText == "erledigt") {
+      stateSelect.selectedIndex = 1;
+    } else if(stateText == "nachdreh") {
+      stateSelect.selectedIndex = 2;
+    }
+    console.log("Status: " + document.getElementById("stateSelect").value);
   }
+}
+
+function createOption(text) {
+  var option = document.createElement("option");
+  var opText = document.createTextNode(text);
+  option.appendChild(opText);
+  return option;
 }
 
 function saveTake() {
@@ -141,17 +197,19 @@ function refreshTable(data) {
 }
 
 function saveUpdateSQL(anweisung) {
-  var sql = "INSERT INTO updateSQLBackup (anweisung) VALUES ('";
-  sql += anweisung + "')";
-  console.log(sql);
-  MySql.Execute(
-    host,
-    username,
-    password,
-    database,
-    sql,
-    refreshTable
-  );
+  // var sql = "INSERT INTO updateSQLBackup (anweisung) VALUES ('";
+  // sql += anweisung + "')";
+  // console.log(sql);
+
+  // MySql.Execute(
+  //   host,
+  //   username,
+  //   password,
+  //   database,
+  //   sql,
+  //   refreshTable
+  // );
+  refreshTable();
 }
 
 function inputEvent(){

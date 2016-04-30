@@ -25,6 +25,12 @@ h1, h2 {
   text-align: center;
 }
 
+#stateSelect{
+  background-color: rgb(231, 234, 260);
+  border-radius: 5px;
+  font-size: 16px;
+}
+
 @media screen {
 html{
   height: 100%;
