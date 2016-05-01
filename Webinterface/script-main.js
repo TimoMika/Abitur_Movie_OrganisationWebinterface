@@ -14,7 +14,7 @@ function getSQLforSchauspieler(name){
 
 function getSQLforSchauspielerAtDate(datum) {
   var sql = "select abkuerzung as 'Abk.', name as Name, uhrzeit as Uhrzeit, id_take as 'Take ID', beschreibung as Beschreibung "
-  sql += "from schauspieler, takes, connector_schauspieler_takes Where takes.id = id_take and schauspieler.id = id_schauspieler"
+  sql += "from schauspieler, takes, connector_schauspieler_takes Where takes.id = id_take and schauspieler.id = id_schauspieler "
   if(datum != "Alle Drehtage") {
     sql += " and datum = '" + datum + "' ";
   }
@@ -31,7 +31,7 @@ function getSQLforDrehtageDropdown(){
 }
 
 function  getSQLforAllTakes(datum) {
-  var sql = "select id_scene as Szene, beschreibung as Beschreibung, datum as Datum, uhrzeit as Uhrzeit, dauer as Dauer, ort as Ort, orts_austattung as 'Orts Austattung', id as ID from takes "
+  var sql = "select id_scene as Szene, beschreibung as Beschreibung, datum as Datum, uhrzeit as Uhrzeit, dauer as Dauer, ort as Ort, orts_austattung as 'Orts Austattung', id as ID, status as Status from takes "
   if(datum != "Alle Drehtage") {
     sql += "Where datum = '" + datum + "' ";
   }
